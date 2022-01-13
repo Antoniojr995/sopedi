@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Comanda({route,navigation}:any) {
   const pedido = route.params.pedido;
-  const usuario = route.params.usuario;
+  const mesa = route.params.mesa;
   const [comanda,setComanda] = React.useState(route.params.comanda);
   const [comidas,setComidas] = React.useState([]);
   const [loading,setLoading] = React.useState(false);
@@ -24,7 +24,7 @@ export default function Comanda({route,navigation}:any) {
   );
   React.useEffect(() => {
     listComida();
-  } ,[usuario,route.params.usuario])
+  } ,[mesa,route.params.mesa])
   async function listComida(){
     let valor_total = 0.00;
     setLoading(false);
@@ -66,17 +66,17 @@ export default function Comanda({route,navigation}:any) {
           <Text>Total R$ {total.toString()}</Text>
           <Button
             onPress={()=>{
-              navigation.navigate("Menu",{usuario:usuario,comanda:comanda})
+              navigation.navigate("Menu",{mesa:mesa,comanda:comanda})
             }}
             title="+"
             color="#0000FF"
           />
            <Button
             onPress={()=>{
-              axios.post(`https://61d5da1d6cb45e001718e069.mockapi.io/pedido`,{usuarioID:usuario.id,comidas:comanda})
+              axios.post(`https://61d5da1d6cb45e001718e069.mockapi.io/pedido`,{mesa:mesa,pronto:false,comidas:comanda})
                 .then(function (response) {
                 console.log(response.data);
-                navigation.navigate("PedidoFeito",{pedido:response.data,usuario:usuario})
+                navigation.navigate("PedidoFeito",{pedido:response.data,mesa:mesa})
               });
             }}
             title="Fazer Pedido"
