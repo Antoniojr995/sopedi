@@ -111,24 +111,34 @@ export default function Comanda({route,navigation}:any) {
                   <Text style={styles.lista_text}>R$ {item.qtd*item.comida.preco}</Text>
                 </View>
               )}
+              ListFooterComponent={(
+                <Button
+                  onPress={()=>{
+                    navigation.navigate("Menu",{mesa:mesa,comanda:comanda})
+                  }}
+                  title="+ Adicionar"
+                  color="#0000FF"
+                />
+              )}
             />
           ):(
             <View><Text>CARREGANDO</Text></View>
           )}
-          <Text style={styles.lista_text}>Total R$ {total.toString()}</Text>
-          <Button
-            onPress={()=>{
-              navigation.navigate("Menu",{mesa:mesa,comanda:comanda})
-            }}
-            title="+"
-            color="#0000FF"
-          />
+          <View style={styles.lista}>
+            <Text style={styles.lista_text}>TOTAL</Text>
+            <Text style={styles.lista_text}>R$ {total.toString()}</Text>
+          </View>
            <Button
             onPress={()=>{
               axios.post(`https://61d5da1d6cb45e001718e069.mockapi.io/pedido`,{mesa:mesa,pronto:false,comidas:comanda})
                 .then(function (response) {
                 console.log(response.data);
-                navigation.navigate("PedidoFeito",{pedido:response.data,mesa:mesa})
+                let tempo = 0;
+                comidas.map((item)=>{
+                  let multipicacao = item.qtd*item.comida.tempo;
+                  tempo+=multipicacao;
+                });
+                navigation.navigate("PedidoFeito",{pedido:response.data,mesa:mesa,tempo:tempo})
               });
             }}
             title="Fazer Pedido"

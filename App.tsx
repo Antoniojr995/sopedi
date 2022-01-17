@@ -3,9 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 /*TELAS*/
-import Login from './telas/login';
-import Cadastro from './telas/cadastro';
+
 import Inicio from './telas/inicio';
 import Menu from './telas/menu';
 import Pedido from './telas/pedido';

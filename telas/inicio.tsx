@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacityBase, TouchableOpacity, SafeAreaView, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { TextInput } from 'react-native-gesture-handler';
 export default function HomeScreen({navigation}){
     const [hasPermission, setHasPermission] = React.useState(null);
     const [scanned, setScanned] = React.useState(false);
+    const [mesa, setMesa] = React.useState(0);
     React.useEffect(() => {
         (async () => {
         const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -14,23 +16,54 @@ export default function HomeScreen({navigation}){
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         let r = parseInt(data);
-        navigation.navigate('Menu',{comanda:[],mesa:r});
+        if(r && r>0){
+            navigation.navigate('Menu',{comanda:[],mesa:r});
+        }
     };
     if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
-      }
-      if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
-      }
-    return (
-    <SafeAreaView style={styles.container}>
-        <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
-      {scanned && <Button title={'Tentar novamente'} onPress={() => setScanned(false)} />}
-    </SafeAreaView>
-    )
+        return (
+            <SafeAreaView style={styles.container}>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={StyleSheet.absoluteFillObject}
+                />
+                {scanned && <Button title={'Tentar novamente'} onPress={() => setScanned(false)} />}
+            </SafeAreaView>
+        )
+    }
+    if (hasPermission === false) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <TextInput
+                    value={mesa}
+                    onChangeText={setMesa}
+                    keyboardType='numeric'
+                />
+                <Button title={'ENIVAR'} onPress={() => navigation.navigate('Menu',{comanda:[],mesa:mesa})} />
+            </SafeAreaView>
+            )
+    }else{
+        return (
+        <SafeAreaView style={styles.container}>
+            <BarCodeScanner
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                style={StyleSheet.absoluteFillObject}
+            />
+            {scanned && (
+                <View>
+                    <Button title={'Tentar novamente'} onPress={() => setScanned(false)} />
+                    <TextInput
+                        style={{backgroundColor:'white'}}
+                        value={mesa}
+                        onChangeText={setMesa}
+                        keyboardType='numeric'
+                    />
+                    <Button title={'ENIVAR'} onPress={() => navigation.navigate('Menu',{comanda:[],mesa:mesa})} />
+                </View>
+            )}
+        </SafeAreaView>
+        )
+    }
 }
 const styles = StyleSheet.create({
     container: {
@@ -38,6 +71,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1EAF4',
         paddingTop: "5%",
         alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center'
     },
     container2: {
         flex: 1,
