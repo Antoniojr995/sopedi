@@ -57,7 +57,7 @@ export default function Pedido({route,navigation}:any) {
               }
             }}
           />
-          <Text style={styles.lista_text}>{item.item.nome}</Text>
+          <Text style={styles.lista_text}>{item.item.nome} {item.item.especificao}</Text>
           <Text style={styles.lista_text}>R$ {item.item.preco.toString()}</Text>
       </View>
     );
@@ -92,6 +92,7 @@ export default function Pedido({route,navigation}:any) {
               style={styles.lista_text}
             />
             <Text style={styles.lista_text}>Nome</Text>
+            <Text style={styles.lista_text}>Especificao</Text>
             <Text style={styles.lista_text}>Preço</Text>
           </View>
         )}
